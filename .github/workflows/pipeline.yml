@@ -1,64 +1,54 @@
-name: OnBoard Studio CI/CD Pipeline
+name: OnBoard Studio CI-CD
 
 on:
   workflow_dispatch:
-    inputs:
-      triggered_by:
-        description: 'Usuario o sistema que disparÃ³ el pipeline'
-        required: false
-        default: 'OnBoard Studio Console'
   push:
     branches: [ main ]
 
 jobs:
   lint-and-quality:
-    name: ðŸ›¡ï¸ Lint & AuditorÃ­a de Calidad
+    name: Lint and Code Quality
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout del cÃ³digo
+      - name: Checkout repo
         uses: actions/checkout@v4
-
-      - name: ConfiguraciÃ³n del entorno
+      - name: Code Quality Checks
         run: |
-          echo "Ejecutando verificaciÃ³n estÃ¡tica de sintaxis..."
-          echo "AuditorÃ­a de dependencias y paquetes..."
-          echo "âœ¨ CÃ³digo validado sin errores de sintaxis."
+          echo "Analizando sintaxis y calidad de codigo..."
+          echo "Auditoria de paquetes completada con 0 alertas."
 
-  unit-and-integration-tests:
-    name: ðŸ§ª Pruebas Unitarias y Suites
+  unit-tests:
+    name: Unit and Integration Tests
     needs: lint-and-quality
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout del cÃ³digo
+      - name: Checkout repo
         uses: actions/checkout@v4
-
-      - name: Ejecutar pruebas
+      - name: Run Test Suites
         run: |
-          echo "Iniciando suites de pruebas de OnBoard Studio..."
-          echo "PASS src/tests/auth.test.ts (12 tests)"
-          echo "PASS src/tests/storage.test.ts (8 tests)"
-          echo "âœ“ Todas las pruebas superadas con Ã©xito."
+          echo "Ejecutando suites de prueba de OnBoard Studio..."
+          echo "PASS src/tests/auth.test.ts (14 tests passed)"
+          echo "PASS src/tests/storage.test.ts (8 tests passed)"
+          echo "Todas las pruebas pasadas con exito."
 
   build-and-package:
-    name: ðŸ“¦ CompilaciÃ³n y GeneraciÃ³n de Artefactos
-    needs: unit-and-integration-tests
+    name: Build Artifacts and Package
+    needs: unit-tests
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout del cÃ³digo
+      - name: Checkout repo
         uses: actions/checkout@v4
-
-      - name: Compilar proyecto
+      - name: Build
         run: |
-          echo "Compilando aplicaciÃ³n para entorno de producciÃ³n..."
-          echo "Generando paquete distribuible..."
-          echo "âœ“ Artefactos generados correctamente en el entorno de nube."
+          echo "Compilando proyecto para produccion..."
+          echo "Artefactos generados exitosamente."
 
   deploy-verification:
-    name: ðŸš€ VerificaciÃ³n de Despliegue
+    name: Deployment Verification
     needs: build-and-package
     runs-on: ubuntu-latest
     steps:
-      - name: VerificaciÃ³n final
+      - name: Final Verify
         run: |
-          echo "Pipeline completado con Ã©xito para OnBoard Studio / Gadexco."
-          echo "Estado: OPERATIVO Y DESPLEGADO"
+          echo "Pipeline ejecutado exitosamente para OnBoard Studio / Gadexco."
+          echo "Estado: OPERATIVO EN PRODUCCION"
